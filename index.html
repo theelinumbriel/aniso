@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="ANISO is a live observatory for a shared population of abstract agents learning to communicate with three unassigned calls."
+    />
+    <meta name="theme-color" content="#f0ede4" />
+    <title>ANISO — A live communication observatory</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#observatory">Skip to observatory</a>
+
+    <div class="app-shell">
+      <header class="masthead">
+        <div class="brand-block">
+          <p class="eyebrow">PUBLIC SYSTEM / OBSERVER MODE</p>
+          <h1>ANISO</h1>
+        </div>
+
+        <div class="clock-block" aria-label="Universal simulation time">
+          <div class="clock-cell clock-cell--wide">
+            <span>UNIVERSAL CLOCK / UTC</span>
+            <strong id="utc-clock">--:--:--</strong>
+          </div>
+          <div class="clock-cell">
+            <span>ERA</span>
+            <strong id="era-value">000</strong>
+          </div>
+          <div class="clock-cell">
+            <span>TICK</span>
+            <strong id="tick-value">000000</strong>
+          </div>
+          <div class="live-cell" title="All visitors observe the same deterministic universe">
+            <i aria-hidden="true"></i>
+            <span>LIVE</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="premise-bar" aria-label="Experiment premise">
+        <p>
+          <span class="premise-index">01</span>
+          36 DOTS. 3 THREATS. 3 UNASSIGNED CALLS.
+        </p>
+        <p>
+          <span class="premise-index">02</span>
+          WATCH FOR A CONVENTION.
+        </p>
+        <div class="call-key" aria-label="Available calls">
+          <span>A</span><span>NI</span><span>SO</span>
+        </div>
+      </section>
+
+      <main id="observatory" class="observatory">
+        <section class="world-panel" aria-labelledby="world-title">
+          <div class="panel-heading">
+            <div>
+              <p class="section-code">FIELD / 001</p>
+              <h2 id="world-title">SHARED WORLD</h2>
+            </div>
+            <p id="sync-status" class="sync-status">SYNCHRONIZING</p>
+          </div>
+
+          <div class="world-stage" id="world-stage">
+            <canvas
+              id="world-canvas"
+              role="img"
+              aria-label="A live field of abstract dot agents and geometric threats. Click a dot to inspect it."
+            ></canvas>
+            <div id="call-layer" class="call-layer" aria-hidden="true"></div>
+            <div class="axis axis--x">X / 000–100</div>
+            <div class="axis axis--y">Y / 000–100</div>
+            <div class="field-caption">CLICK ANY DOT / READ-ONLY INSPECTION</div>
+          </div>
+
+          <div class="threat-legend" aria-label="Threat classes">
+            <div>
+              <span class="threat-mark threat-mark--sweep" aria-hidden="true"></span>
+              <p><b>T–01</b> SWEEP</p>
+            </div>
+            <div>
+              <span class="threat-mark threat-mark--pulse" aria-hidden="true"></span>
+              <p><b>T–02</b> PULSE</p>
+            </div>
+            <div>
+              <span class="threat-mark threat-mark--sink" aria-hidden="true"></span>
+              <p><b>T–03</b> SINK</p>
+            </div>
+            <p class="legend-note">Threat labels describe geometry, not call meaning.</p>
+          </div>
+        </section>
+
+        <aside class="data-panel" aria-label="Simulation data">
+          <section id="global-view" class="data-view" aria-labelledby="global-title">
+            <div class="panel-heading panel-heading--tight">
+              <div>
+                <p class="section-code">POPULATION / ALL</p>
+                <h2 id="global-title">UNIVERSAL STATS</h2>
+              </div>
+              <span class="read-only-label">READ ONLY</span>
+            </div>
+
+            <div class="stat-grid">
+              <article class="stat-cell stat-cell--large">
+                <span>POPULATION</span>
+                <strong id="stat-population">36</strong>
+                <small id="stat-births">+00 births this era</small>
+              </article>
+              <article class="stat-cell">
+                <span>SURVIVAL</span>
+                <strong id="stat-survival">--.-%</strong>
+              </article>
+              <article class="stat-cell">
+                <span>CALLS / 100T</span>
+                <strong id="stat-call-rate">--</strong>
+              </article>
+              <article class="stat-cell">
+                <span>AGREEMENT</span>
+                <strong id="stat-agreement">--%</strong>
+              </article>
+              <article class="stat-cell">
+                <span>USEFUL SIGNALS</span>
+                <strong id="stat-useful">--%</strong>
+              </article>
+            </div>
+
+            <div class="metric-block">
+              <div class="metric-heading">
+                <div>
+                  <span class="section-code">LAST 240 TICKS</span>
+                  <h3>CALL FREQUENCY</h3>
+                </div>
+                <span id="call-total">000 TOTAL</span>
+              </div>
+              <div class="bar-row">
+                <b>A</b>
+                <div class="bar-track"><i id="bar-a"></i></div>
+                <span id="count-a">0</span>
+              </div>
+              <div class="bar-row">
+                <b>NI</b>
+                <div class="bar-track"><i id="bar-ni"></i></div>
+                <span id="count-ni">0</span>
+              </div>
+              <div class="bar-row">
+                <b>SO</b>
+                <div class="bar-track"><i id="bar-so"></i></div>
+                <span id="count-so">0</span>
+              </div>
+            </div>
+
+            <div class="metric-block matrix-block">
+              <div class="metric-heading">
+                <div>
+                  <span class="section-code">OBSERVED ASSOCIATION</span>
+                  <h3>SIGNAL × THREAT</h3>
+                </div>
+                <span>NOT DEFINITIONS</span>
+              </div>
+              <div class="matrix" id="signal-matrix" aria-label="Observed call and threat association matrix">
+                <span></span><b>T–01</b><b>T–02</b><b>T–03</b>
+                <b>A</b><i>–</i><i>–</i><i>–</i>
+                <b>NI</b><i>–</i><i>–</i><i>–</i>
+                <b>SO</b><i>–</i><i>–</i><i>–</i>
+              </div>
+            </div>
+
+            <div class="metric-block">
+              <div class="metric-heading">
+                <div>
+                  <span class="section-code">COMMUNICATION LIFT</span>
+                  <h3>HEARD VS. UNHEARD</h3>
+                </div>
+                <strong id="lift-value">+0.0%</strong>
+              </div>
+              <div class="lift-plot" aria-hidden="true">
+                <span>0</span>
+                <i id="lift-marker"></i>
+                <span>+100</span>
+              </div>
+            </div>
+          </section>
+
+          <section id="agent-view" class="data-view agent-view" aria-labelledby="agent-title" hidden>
+            <div class="panel-heading panel-heading--tight">
+              <div>
+                <p class="section-code">DOT / SELECTED</p>
+                <h2 id="agent-title">AGENT A–000</h2>
+              </div>
+              <button id="close-agent" class="close-button" type="button" aria-label="Close agent details">×</button>
+            </div>
+
+            <div class="agent-state-band">
+              <span id="agent-state-dot" aria-hidden="true"></span>
+              <div>
+                <small>CURRENT STATE</small>
+                <strong id="agent-state">OBSERVING</strong>
+              </div>
+              <div>
+                <small>LINEAGE</small>
+                <strong id="agent-lineage">G00</strong>
+              </div>
+            </div>
+
+            <dl class="agent-facts">
+              <div><dt>AGE</dt><dd id="agent-age">000T</dd></div>
+              <div><dt>ENERGY</dt><dd id="agent-energy">000</dd></div>
+              <div><dt>INTERACTIONS</dt><dd id="agent-interactions">000</dd></div>
+              <div><dt>SUCCESS</dt><dd id="agent-success">00%</dd></div>
+              <div><dt>CALLS SENT</dt><dd id="agent-sent">000</dd></div>
+              <div><dt>CALLS HEARD</dt><dd id="agent-heard">000</dd></div>
+            </dl>
+
+            <div class="metric-block agent-preferences">
+              <div class="metric-heading">
+                <div>
+                  <span class="section-code">PRODUCTION POLICY</span>
+                  <h3>CURRENT CALL BIAS</h3>
+                </div>
+              </div>
+              <div id="agent-biases"></div>
+            </div>
+
+            <div class="history-block">
+              <div class="metric-heading">
+                <div>
+                  <span class="section-code">LOCAL LEDGER</span>
+                  <h3>INTERACTION HISTORY</h3>
+                </div>
+              </div>
+              <ol id="agent-history" class="agent-history"></ol>
+            </div>
+          </section>
+        </aside>
+
+        <section class="event-panel" aria-labelledby="event-title">
+          <div class="event-heading">
+            <div>
+              <p class="section-code">APPEND-ONLY / LATEST FIRST</p>
+              <h2 id="event-title">GLOBAL EVENT STREAM</h2>
+            </div>
+            <p><span class="event-key event-key--good"></span> USEFUL <span class="event-key event-key--bad"></span> FAILED</p>
+          </div>
+          <div class="event-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>TIME</th>
+                  <th>WITNESS</th>
+                  <th>CALL</th>
+                  <th>HEARD BY</th>
+                  <th>THREAT</th>
+                  <th>RESPONSE</th>
+                  <th>OUTCOME</th>
+                </tr>
+              </thead>
+              <tbody id="event-rows"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>ANISO / THREE SOUNDS, NO DICTIONARY</p>
+        <p>SELECTION CHANGES THE VIEW, NEVER THE WORLD.</p>
+        <p id="footer-seed">SEED / —</p>
+      </footer>
+    </div>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
