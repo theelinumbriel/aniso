@@ -6,16 +6,17 @@
   const TICK_MS = 2500;
   const WORLD = { width: 1000, height: 700 };
   const POPULATION = 36;
-  const CALLS = ["A", "NI", "SO"];
+  const CALLS = ["a", "ni", "so"];
   const THREATS = [
-    { code: "T–01", name: "SWEEP", response: "SCATTER", color: "#ff3d00" },
-    { code: "T–02", name: "PULSE", response: "ANCHOR", color: "#3f68ff" },
-    { code: "T–03", name: "SINK", response: "CLUSTER", color: "#11110f" },
+    { code: "T-01", name: "sweep", response: "scatter" },
+    { code: "T-02", name: "pulse", response: "anchor" },
+    { code: "T-03", name: "sink", response: "cluster" },
   ];
 
   const elements = {
     canvas: document.querySelector("#world-canvas"),
     stage: document.querySelector("#world-stage"),
+    agentLayer: document.querySelector("#agent-layer"),
     callLayer: document.querySelector("#call-layer"),
     syncStatus: document.querySelector("#sync-status"),
     utcClock: document.querySelector("#utc-clock"),
@@ -34,6 +35,7 @@
   let selectedAgentId = null;
   let canvasSize = { width: 1, height: 1, dpr: 1 };
   let lastUiUpdate = 0;
+  const agentButtons = new Map();
 
   function hashString(input) {
     let hash = 2166136261;
@@ -330,18 +332,18 @@
         agent.velocityY = (agent.velocityY / speed) * maxSpeed;
       }
 
-      if (agent.state === "CLUSTER") {
+      if (agent.state === "cluster") {
         const centerX = state.agents.reduce((sum, member) => sum + member.x, 0) / state.agents.length;
         const centerY = state.agents.reduce((sum, member) => sum + member.y, 0) / state.agents.length;
         agent.velocityX += (centerX - agent.x) * 0.004;
         agent.velocityY += (centerY - agent.y) * 0.004;
-      } else if (agent.state === "SCATTER") {
+      } else if (agent.state === "scatter") {
         const closestThreat = state.threats[0];
         if (closestThreat) {
           agent.velocityX += Math.sign(agent.x - closestThreat.x) * 0.8;
           agent.velocityY += Math.sign(agent.y - closestThreat.y) * 0.8;
         }
-      } else if (agent.state === "ANCHOR") {
+      } else if (agent.state === "anchor") {
         agent.velocityX *= 0.54;
         agent.velocityY *= 0.54;
       }
@@ -385,11 +387,11 @@
   }
 
   function synchronize(universeTime) {
-    elements.syncStatus.textContent = "SYNCHRONIZING";
+    elements.syncStatus.textContent = "Synchronizing";
     world = initializeWorld(universeTime.eraIndex);
     for (let tick = 0; tick < universeTime.eraTick; tick += 1) stepWorld(world, false);
-    elements.syncStatus.textContent = "SYNCHRONIZED";
-    elements.footerSeed.textContent = `SEED / ${world.seed.toString(16).toUpperCase().padStart(8, "0")}`;
+    elements.syncStatus.textContent = "Synchronized";
+    elements.footerSeed.textContent = `Seed: ${world.seed.toString(16).toUpperCase().padStart(8, "0")}`;
     updateDashboard();
   }
 
@@ -409,14 +411,6 @@
     window.setTimeout(() => bubble.remove(), 1500);
   }
 
-  function stateColor(agent) {
-    if (agent.id === selectedAgentId) return "#dfff00";
-    if (agent.state.startsWith("CALLING")) return "#ff3d00";
-    if (agent.state.startsWith("WRONG")) return "#ff8b66";
-    if (["SCATTER", "ANCHOR", "CLUSTER"].includes(agent.state)) return "#3f68ff";
-    return "#11110f";
-  }
-
   function drawThreat(threat, progress) {
     const scaleX = canvasSize.width / WORLD.width;
     const scaleY = canvasSize.height / WORLD.height;
@@ -430,18 +424,18 @@
 
     if (threat.type === 0) {
       const width = 18 + life * 75;
-      ctx.fillStyle = "rgba(255, 61, 0, 0.14)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
       ctx.fillRect(x - width / 2, 0, width, canvasSize.height);
-      ctx.strokeStyle = "#ff3d00";
-      ctx.lineWidth = 5;
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, canvasSize.height);
       ctx.stroke();
     } else if (threat.type === 1) {
       const radius = (20 + life * 110) * ((scaleX + scaleY) / 2);
-      ctx.strokeStyle = "#3f68ff";
-      ctx.lineWidth = 4;
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);
       ctx.stroke();
@@ -452,38 +446,43 @@
       const radius = 12 + life * 26;
       ctx.translate(x, y);
       ctx.rotate(Math.PI / 4 + life * 0.8);
-      ctx.fillStyle = "#11110f";
+      ctx.fillStyle = "#000";
       ctx.fillRect(-radius, -radius, radius * 2, radius * 2);
-      ctx.strokeStyle = "#f0ede4";
+      ctx.strokeStyle = "#fff";
       ctx.strokeRect(-radius * 0.55, -radius * 0.55, radius * 1.1, radius * 1.1);
     }
     ctx.restore();
   }
 
-  function drawAgent(agent, progress) {
-    const scaleX = canvasSize.width / WORLD.width;
-    const scaleY = canvasSize.height / WORLD.height;
-    const x = (agent.previousX + (agent.x - agent.previousX) * progress) * scaleX;
-    const y = (agent.previousY + (agent.y - agent.previousY) * progress) * scaleY;
-    const radius = agent.id === selectedAgentId ? 7 : 4.7;
+  function renderAgentButtons(progress) {
+    const currentIds = new Set(world.agents.map((agent) => agent.id));
+    agentButtons.forEach((button, id) => {
+      if (!currentIds.has(id)) {
+        button.remove();
+        agentButtons.delete(id);
+      }
+    });
 
-    ctx.save();
-    if (agent.id === selectedAgentId) {
-      ctx.strokeStyle = "#11110f";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(x - 12, y - 12, 24, 24);
-      ctx.fillStyle = "#11110f";
-      ctx.font = "bold 9px monospace";
-      ctx.fillText(agent.id, x + 15, y - 8);
-    }
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = stateColor(agent);
-    ctx.fill();
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = "#11110f";
-    ctx.stroke();
-    ctx.restore();
+    world.agents.forEach((agent) => {
+      let button = agentButtons.get(agent.id);
+      if (!button) {
+        button = document.createElement("button");
+        button.type = "button";
+        button.className = "agent-point";
+        button.addEventListener("click", () => openAgentView(agent.id));
+        elements.agentLayer.appendChild(button);
+        agentButtons.set(agent.id, button);
+      }
+
+      const x = agent.previousX + (agent.x - agent.previousX) * progress;
+      const y = agent.previousY + (agent.y - agent.previousY) * progress;
+      button.style.left = `${(x / WORLD.width) * 100}%`;
+      button.style.top = `${(y / WORLD.height) * 100}%`;
+      button.dataset.state = agent.state === "OBSERVING" ? "observing" : "active";
+      button.setAttribute("aria-pressed", String(agent.id === selectedAgentId));
+      button.setAttribute("aria-label", `Inspect ${agent.id}; state ${agent.state.toLowerCase()}`);
+      button.title = `${agent.id}: ${agent.state.toLowerCase()}`;
+    });
   }
 
   function renderCanvas(now) {
@@ -492,7 +491,7 @@
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
 
     world.threats.forEach((threat) => drawThreat(threat, universeTime.tickProgress));
-    world.agents.forEach((agent) => drawAgent(agent, universeTime.tickProgress));
+    renderAgentButtons(universeTime.tickProgress);
   }
 
   function resizeCanvas() {
@@ -564,7 +563,7 @@
         event.receiverId,
         `${THREATS[event.threatType].code} / ${THREATS[event.threatType].name}`,
         event.response,
-        event.successful ? "USEFUL" : "FAILED",
+        event.successful ? "successful" : "unsuccessful",
       ];
       values.forEach((value, index) => {
         const cell = document.createElement("td");
@@ -582,7 +581,7 @@
       const row = document.createElement("tr");
       const cell = document.createElement("td");
       cell.colSpan = 7;
-      cell.textContent = "THE WORLD IS QUIET. WAITING FOR THE FIRST ENCOUNTER.";
+      cell.textContent = "No interactions have been recorded in the current era.";
       row.appendChild(cell);
       fragment.appendChild(row);
     }
@@ -601,12 +600,12 @@
     const lift = Math.max(0, usefulRate - 1 / 3);
 
     setText("#stat-population", world.agents.length);
-    setText("#stat-births", `+${pad(world.births)} births this era`);
+    setText("#stat-births", world.births);
     setText("#stat-survival", `${(survival * 100).toFixed(1)}%`);
     setText("#stat-call-rate", Math.round((recentTotal / 240) * 100));
     setText("#stat-agreement", `${Math.round(agreement * 100)}%`);
     setText("#stat-useful", `${Math.round(usefulRate * 100)}%`);
-    setText("#call-total", `${pad(recentTotal, 3)} TOTAL`);
+    setText("#call-total", `${recentTotal} total`);
     setText("#count-a", recent[0]);
     setText("#count-ni", recent[1]);
     setText("#count-so", recent[2]);
@@ -631,7 +630,7 @@
     }
 
     const success = agent.interactions ? agent.successes / agent.interactions : 0;
-    setText("#agent-title", `AGENT ${agent.id}`);
+    setText("#agent-title", `2. Selected agent: ${agent.id}`);
     setText("#agent-state", agent.state);
     setText("#agent-lineage", `G${pad(agent.generation)}`);
     setText("#agent-age", `${pad(world.tick - agent.bornTick, 4)}T`);
@@ -640,7 +639,7 @@
     setText("#agent-success", `${Math.round(success * 100)}%`);
     setText("#agent-sent", pad(agent.sent, 3));
     setText("#agent-heard", pad(agent.heard, 3));
-    document.querySelector("#agent-state-dot").style.background = stateColor(agent);
+    document.querySelector("#agent-state-dot").style.color = "#000";
 
     const biasContainer = document.querySelector("#agent-biases");
     const biasFragment = document.createDocumentFragment();
@@ -670,14 +669,15 @@
       time.textContent = formatTickTime(entry.tick);
       const description = document.createElement("span");
       const outcome = entry.successful ? "useful" : "failed";
-      description.innerHTML = `${entry.role} <em>${entry.call}</em> ${entry.role === "SENT" ? "to" : "from"} ${entry.otherId} during ${THREATS[entry.threatType].code}. ${entry.response} / ${outcome}.`;
+      const role = entry.role === "SENT" ? "Sent" : "Heard";
+      description.innerHTML = `${role} <em>${entry.call}</em> ${entry.role === "SENT" ? "to" : "from"} ${entry.otherId} during ${THREATS[entry.threatType].code}. Response: ${entry.response}; outcome: ${outcome}.`;
       item.append(time, description);
       historyFragment.appendChild(item);
     });
     if (!agent.history.length) {
       const item = document.createElement("li");
       item.className = "history-empty";
-      item.textContent = "NO RECORDED INTERACTIONS YET.";
+      item.textContent = "No recorded interactions yet.";
       historyFragment.appendChild(item);
     }
     historyContainer.replaceChildren(historyFragment);
@@ -733,16 +733,6 @@
     window.requestAnimationFrame(frame);
   }
 
-  elements.canvas.addEventListener("click", (event) => selectNearestAgent(event.clientX, event.clientY));
-  elements.canvas.tabIndex = 0;
-  elements.canvas.addEventListener("keydown", (event) => {
-    if (!["ArrowLeft", "ArrowRight", "Enter"].includes(event.key) || !world) return;
-    event.preventDefault();
-    const currentIndex = world.agents.findIndex((agent) => agent.id === selectedAgentId);
-    const direction = event.key === "ArrowLeft" ? -1 : 1;
-    const nextIndex = currentIndex < 0 ? 0 : (currentIndex + direction + world.agents.length) % world.agents.length;
-    openAgentView(world.agents[nextIndex].id);
-  });
   elements.closeAgent.addEventListener("click", closeAgentView);
 
   const resizeObserver = new ResizeObserver(resizeCanvas);

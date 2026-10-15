@@ -5,271 +5,225 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="ANISO is a live observatory for a shared population of abstract agents learning to communicate with three unassigned calls."
+      content="ANISO is a live agent-based simulation of convention formation using three initially unassigned signals."
     />
-    <meta name="theme-color" content="#f0ede4" />
-    <title>ANISO — A live communication observatory</title>
+    <title>ANISO — Agent-based communication simulation</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <a class="skip-link" href="#observatory">Skip to observatory</a>
+    <a class="skip-link" href="#main">Skip to simulation</a>
 
-    <div class="app-shell">
-      <header class="masthead">
-        <div class="brand-block">
-          <p class="eyebrow">PUBLIC SYSTEM / OBSERVER MODE</p>
-          <h1>ANISO</h1>
-        </div>
+    <header class="page-header">
+      <h1>ANISO</h1>
+      <p>Agent-based simulation of convention formation</p>
 
-        <div class="clock-block" aria-label="Universal simulation time">
-          <div class="clock-cell clock-cell--wide">
-            <span>UNIVERSAL CLOCK / UTC</span>
-            <strong id="utc-clock">--:--:--</strong>
-          </div>
-          <div class="clock-cell">
-            <span>ERA</span>
-            <strong id="era-value">000</strong>
-          </div>
-          <div class="clock-cell">
-            <span>TICK</span>
-            <strong id="tick-value">000000</strong>
-          </div>
-          <div class="live-cell" title="All visitors observe the same deterministic universe">
-            <i aria-hidden="true"></i>
-            <span>LIVE</span>
-          </div>
-        </div>
-      </header>
+      <table class="system-table">
+        <tbody>
+          <tr>
+            <th scope="row">Status</th>
+            <td><span id="sync-status">Synchronizing</span></td>
+            <th scope="row">UTC time</th>
+            <td id="utc-clock">--:--:--</td>
+          </tr>
+          <tr>
+            <th scope="row">Era</th>
+            <td id="era-value">000</td>
+            <th scope="row">Universal tick</th>
+            <td id="tick-value">000000</td>
+          </tr>
+          <tr>
+            <th scope="row">Signals</th>
+            <td><i>a</i>, <i>ni</i>, <i>so</i></td>
+            <th scope="row">Mode</th>
+            <td>Observation only</td>
+          </tr>
+        </tbody>
+      </table>
+    </header>
 
-      <section class="premise-bar" aria-label="Experiment premise">
+    <main id="main">
+      <section aria-labelledby="abstract-title">
+        <h2 id="abstract-title">Abstract</h2>
         <p>
-          <span class="premise-index">01</span>
-          36 DOTS. 3 THREATS. 3 UNASSIGNED CALLS.
+          Thirty-six agents encounter three classes of environmental threat. Each agent may emit one of
+          three signals. Signals have no assigned meanings at initialization. Production and interpretation
+          policies change through reinforcement following successful or unsuccessful interactions.
         </p>
-        <p>
-          <span class="premise-index">02</span>
-          WATCH FOR A CONVENTION.
-        </p>
-        <div class="call-key" aria-label="Available calls">
-          <span>A</span><span>NI</span><span>SO</span>
+      </section>
+
+      <div class="primary-layout">
+        <section class="world-section" aria-labelledby="world-title">
+          <h2 id="world-title">1. Experimental field</h2>
+          <p class="figure-note">
+            Points denote agents. Select a point to inspect its state and interaction record.
+          </p>
+
+          <figure>
+            <div class="world-stage" id="world-stage">
+              <canvas
+                id="world-canvas"
+                role="img"
+                aria-label="A field containing abstract agents and three classes of geometric threat."
+              ></canvas>
+              <div id="agent-layer" class="agent-layer" aria-label="Agents in the field"></div>
+              <div id="call-layer" class="call-layer" aria-hidden="true"></div>
+            </div>
+            <figcaption>
+              Figure 1. Current state of the shared deterministic simulation. Position has no intrinsic
+              semantic value.
+            </figcaption>
+          </figure>
+
+          <table class="legend-table">
+            <caption>Threat classes and rewarded responses</caption>
+            <thead>
+              <tr>
+                <th scope="col">Class</th>
+                <th scope="col">Display</th>
+                <th scope="col">Rewarded response</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>T-01 (sweep)</td>
+                <td><span class="threat-mark threat-mark--sweep" aria-label="vertical line"></span></td>
+                <td>Scatter</td>
+              </tr>
+              <tr>
+                <td>T-02 (pulse)</td>
+                <td><span class="threat-mark threat-mark--pulse" aria-label="circle"></span></td>
+                <td>Anchor</td>
+              </tr>
+              <tr>
+                <td>T-03 (sink)</td>
+                <td><span class="threat-mark threat-mark--sink" aria-label="diamond"></span></td>
+                <td>Cluster</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <aside class="data-section" aria-label="Simulation measurements">
+          <section id="global-view" aria-labelledby="global-title">
+            <h2 id="global-title">2. Population statistics</h2>
+
+            <table class="statistics-table">
+              <tbody>
+                <tr><th scope="row">Population</th><td id="stat-population">36</td></tr>
+                <tr><th scope="row">Births in current era</th><td id="stat-births">0</td></tr>
+                <tr><th scope="row">Survival</th><td id="stat-survival">--.-%</td></tr>
+                <tr><th scope="row">Signals per 100 ticks</th><td id="stat-call-rate">--</td></tr>
+                <tr><th scope="row">Population agreement</th><td id="stat-agreement">--%</td></tr>
+                <tr><th scope="row">Useful signals</th><td id="stat-useful">--%</td></tr>
+              </tbody>
+            </table>
+
+            <h3>2.1 Signal frequency</h3>
+            <p class="measure-note">Observations in the preceding 240 ticks. <span id="call-total">0 total</span>.</p>
+            <div class="frequency-table" role="table" aria-label="Signal frequency">
+              <div role="row">
+                <b role="rowheader"><i>a</i></b>
+                <span class="bar-track" role="cell"><i id="bar-a"></i></span>
+                <span id="count-a" role="cell">0</span>
+              </div>
+              <div role="row">
+                <b role="rowheader"><i>ni</i></b>
+                <span class="bar-track" role="cell"><i id="bar-ni"></i></span>
+                <span id="count-ni" role="cell">0</span>
+              </div>
+              <div role="row">
+                <b role="rowheader"><i>so</i></b>
+                <span class="bar-track" role="cell"><i id="bar-so"></i></span>
+                <span id="count-so" role="cell">0</span>
+              </div>
+            </div>
+
+            <h3>2.2 Signal–threat association</h3>
+            <p class="measure-note">
+              Percent of recorded uses of each signal. These are observations, not assigned meanings.
+            </p>
+            <div class="matrix" id="signal-matrix" role="table" aria-label="Observed signal and threat association matrix">
+              <span></span><b>T-01</b><b>T-02</b><b>T-03</b>
+              <b><i>a</i></b><i>–</i><i>–</i><i>–</i>
+              <b><i>ni</i></b><i>–</i><i>–</i><i>–</i>
+              <b><i>so</i></b><i>–</i><i>–</i><i>–</i>
+            </div>
+
+            <h3>2.3 Communication lift</h3>
+            <p class="measure-note">Successful interpretation above the chance baseline: <strong id="lift-value">+0.0%</strong>.</p>
+            <div class="lift-plot" aria-hidden="true">
+              <span>0</span>
+              <i id="lift-marker"></i>
+              <span>+100%</span>
+            </div>
+          </section>
+
+          <section id="agent-view" class="agent-view" aria-labelledby="agent-title" hidden>
+            <h2 id="agent-title">2. Selected agent</h2>
+            <p><button id="close-agent" type="button">Return to population statistics</button></p>
+
+            <table class="statistics-table">
+              <tbody>
+                <tr>
+                  <th scope="row">Current state</th>
+                  <td><span id="agent-state-dot" aria-hidden="true">●</span> <span id="agent-state">Observing</span></td>
+                </tr>
+                <tr><th scope="row">Lineage</th><td id="agent-lineage">G00</td></tr>
+                <tr><th scope="row">Age</th><td id="agent-age">000T</td></tr>
+                <tr><th scope="row">Energy</th><td id="agent-energy">000</td></tr>
+                <tr><th scope="row">Interactions</th><td id="agent-interactions">000</td></tr>
+                <tr><th scope="row">Successful interactions</th><td id="agent-success">00%</td></tr>
+                <tr><th scope="row">Signals sent</th><td id="agent-sent">000</td></tr>
+                <tr><th scope="row">Signals heard</th><td id="agent-heard">000</td></tr>
+              </tbody>
+            </table>
+
+            <h3>2.1 Current production policy</h3>
+            <p class="measure-note">Estimated probability of selecting each signal after observing a threat.</p>
+            <div id="agent-biases" class="agent-preferences"></div>
+
+            <h3>2.2 Interaction history</h3>
+            <ol id="agent-history" class="agent-history"></ol>
+          </section>
+        </aside>
+      </div>
+
+      <section class="event-section" aria-labelledby="event-title">
+        <h2 id="event-title">3. Recent interaction records</h2>
+        <div class="event-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">UTC time</th>
+                <th scope="col">Sender</th>
+                <th scope="col">Signal</th>
+                <th scope="col">Receiver</th>
+                <th scope="col">Threat</th>
+                <th scope="col">Response</th>
+                <th scope="col">Outcome</th>
+              </tr>
+            </thead>
+            <tbody id="event-rows"></tbody>
+          </table>
         </div>
       </section>
 
-      <main id="observatory" class="observatory">
-        <section class="world-panel" aria-labelledby="world-title">
-          <div class="panel-heading">
-            <div>
-              <p class="section-code">FIELD / 001</p>
-              <h2 id="world-title">SHARED WORLD</h2>
-            </div>
-            <p id="sync-status" class="sync-status">SYNCHRONIZING</p>
-          </div>
+      <section aria-labelledby="notes-title">
+        <h2 id="notes-title">4. Notes</h2>
+        <ol>
+          <li>Signal production and interpretation weights are initialized independently without a signal–threat mapping.</li>
+          <li>The simulation is deterministic within an era and is reconstructed from UTC time and a shared seed.</li>
+          <li>Selecting an agent changes only the displayed record. It does not alter the simulation.</li>
+        </ol>
+      </section>
+    </main>
 
-          <div class="world-stage" id="world-stage">
-            <canvas
-              id="world-canvas"
-              role="img"
-              aria-label="A live field of abstract dot agents and geometric threats. Click a dot to inspect it."
-            ></canvas>
-            <div id="call-layer" class="call-layer" aria-hidden="true"></div>
-            <div class="axis axis--x">X / 000–100</div>
-            <div class="axis axis--y">Y / 000–100</div>
-            <div class="field-caption">CLICK ANY DOT / READ-ONLY INSPECTION</div>
-          </div>
-
-          <div class="threat-legend" aria-label="Threat classes">
-            <div>
-              <span class="threat-mark threat-mark--sweep" aria-hidden="true"></span>
-              <p><b>T–01</b> SWEEP</p>
-            </div>
-            <div>
-              <span class="threat-mark threat-mark--pulse" aria-hidden="true"></span>
-              <p><b>T–02</b> PULSE</p>
-            </div>
-            <div>
-              <span class="threat-mark threat-mark--sink" aria-hidden="true"></span>
-              <p><b>T–03</b> SINK</p>
-            </div>
-            <p class="legend-note">Threat labels describe geometry, not call meaning.</p>
-          </div>
-        </section>
-
-        <aside class="data-panel" aria-label="Simulation data">
-          <section id="global-view" class="data-view" aria-labelledby="global-title">
-            <div class="panel-heading panel-heading--tight">
-              <div>
-                <p class="section-code">POPULATION / ALL</p>
-                <h2 id="global-title">UNIVERSAL STATS</h2>
-              </div>
-              <span class="read-only-label">READ ONLY</span>
-            </div>
-
-            <div class="stat-grid">
-              <article class="stat-cell stat-cell--large">
-                <span>POPULATION</span>
-                <strong id="stat-population">36</strong>
-                <small id="stat-births">+00 births this era</small>
-              </article>
-              <article class="stat-cell">
-                <span>SURVIVAL</span>
-                <strong id="stat-survival">--.-%</strong>
-              </article>
-              <article class="stat-cell">
-                <span>CALLS / 100T</span>
-                <strong id="stat-call-rate">--</strong>
-              </article>
-              <article class="stat-cell">
-                <span>AGREEMENT</span>
-                <strong id="stat-agreement">--%</strong>
-              </article>
-              <article class="stat-cell">
-                <span>USEFUL SIGNALS</span>
-                <strong id="stat-useful">--%</strong>
-              </article>
-            </div>
-
-            <div class="metric-block">
-              <div class="metric-heading">
-                <div>
-                  <span class="section-code">LAST 240 TICKS</span>
-                  <h3>CALL FREQUENCY</h3>
-                </div>
-                <span id="call-total">000 TOTAL</span>
-              </div>
-              <div class="bar-row">
-                <b>A</b>
-                <div class="bar-track"><i id="bar-a"></i></div>
-                <span id="count-a">0</span>
-              </div>
-              <div class="bar-row">
-                <b>NI</b>
-                <div class="bar-track"><i id="bar-ni"></i></div>
-                <span id="count-ni">0</span>
-              </div>
-              <div class="bar-row">
-                <b>SO</b>
-                <div class="bar-track"><i id="bar-so"></i></div>
-                <span id="count-so">0</span>
-              </div>
-            </div>
-
-            <div class="metric-block matrix-block">
-              <div class="metric-heading">
-                <div>
-                  <span class="section-code">OBSERVED ASSOCIATION</span>
-                  <h3>SIGNAL × THREAT</h3>
-                </div>
-                <span>NOT DEFINITIONS</span>
-              </div>
-              <div class="matrix" id="signal-matrix" aria-label="Observed call and threat association matrix">
-                <span></span><b>T–01</b><b>T–02</b><b>T–03</b>
-                <b>A</b><i>–</i><i>–</i><i>–</i>
-                <b>NI</b><i>–</i><i>–</i><i>–</i>
-                <b>SO</b><i>–</i><i>–</i><i>–</i>
-              </div>
-            </div>
-
-            <div class="metric-block">
-              <div class="metric-heading">
-                <div>
-                  <span class="section-code">COMMUNICATION LIFT</span>
-                  <h3>HEARD VS. UNHEARD</h3>
-                </div>
-                <strong id="lift-value">+0.0%</strong>
-              </div>
-              <div class="lift-plot" aria-hidden="true">
-                <span>0</span>
-                <i id="lift-marker"></i>
-                <span>+100</span>
-              </div>
-            </div>
-          </section>
-
-          <section id="agent-view" class="data-view agent-view" aria-labelledby="agent-title" hidden>
-            <div class="panel-heading panel-heading--tight">
-              <div>
-                <p class="section-code">DOT / SELECTED</p>
-                <h2 id="agent-title">AGENT A–000</h2>
-              </div>
-              <button id="close-agent" class="close-button" type="button" aria-label="Close agent details">×</button>
-            </div>
-
-            <div class="agent-state-band">
-              <span id="agent-state-dot" aria-hidden="true"></span>
-              <div>
-                <small>CURRENT STATE</small>
-                <strong id="agent-state">OBSERVING</strong>
-              </div>
-              <div>
-                <small>LINEAGE</small>
-                <strong id="agent-lineage">G00</strong>
-              </div>
-            </div>
-
-            <dl class="agent-facts">
-              <div><dt>AGE</dt><dd id="agent-age">000T</dd></div>
-              <div><dt>ENERGY</dt><dd id="agent-energy">000</dd></div>
-              <div><dt>INTERACTIONS</dt><dd id="agent-interactions">000</dd></div>
-              <div><dt>SUCCESS</dt><dd id="agent-success">00%</dd></div>
-              <div><dt>CALLS SENT</dt><dd id="agent-sent">000</dd></div>
-              <div><dt>CALLS HEARD</dt><dd id="agent-heard">000</dd></div>
-            </dl>
-
-            <div class="metric-block agent-preferences">
-              <div class="metric-heading">
-                <div>
-                  <span class="section-code">PRODUCTION POLICY</span>
-                  <h3>CURRENT CALL BIAS</h3>
-                </div>
-              </div>
-              <div id="agent-biases"></div>
-            </div>
-
-            <div class="history-block">
-              <div class="metric-heading">
-                <div>
-                  <span class="section-code">LOCAL LEDGER</span>
-                  <h3>INTERACTION HISTORY</h3>
-                </div>
-              </div>
-              <ol id="agent-history" class="agent-history"></ol>
-            </div>
-          </section>
-        </aside>
-
-        <section class="event-panel" aria-labelledby="event-title">
-          <div class="event-heading">
-            <div>
-              <p class="section-code">APPEND-ONLY / LATEST FIRST</p>
-              <h2 id="event-title">GLOBAL EVENT STREAM</h2>
-            </div>
-            <p><span class="event-key event-key--good"></span> USEFUL <span class="event-key event-key--bad"></span> FAILED</p>
-          </div>
-          <div class="event-table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>TIME</th>
-                  <th>WITNESS</th>
-                  <th>CALL</th>
-                  <th>HEARD BY</th>
-                  <th>THREAT</th>
-                  <th>RESPONSE</th>
-                  <th>OUTCOME</th>
-                </tr>
-              </thead>
-              <tbody id="event-rows"></tbody>
-            </table>
-          </div>
-        </section>
-      </main>
-
-      <footer>
-        <p>ANISO / THREE SOUNDS, NO DICTIONARY</p>
-        <p>SELECTION CHANGES THE VIEW, NEVER THE WORLD.</p>
-        <p id="footer-seed">SEED / —</p>
-      </footer>
-    </div>
+    <footer>
+      <p>
+        <a href="https://github.com/theelinumbriel/aniso">Source code</a>
+        · <span id="footer-seed">Seed: —</span>
+      </p>
+    </footer>
 
     <script src="./app.js" defer></script>
   </body>
