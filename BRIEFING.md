@@ -2,7 +2,7 @@
 
 ## Project briefing
 
-**Working idea:** a public artificial-life simulation in which a population of small, visibly embodied agents begins with only three possible vocal units—`a`, `ni`, and `so`—and must survive, coordinate, learn, reproduce, and transmit conventions. Visitors watch whether the population develops stable call meanings, sequences, local dialects, or something that deserves to be called compositional communication.
+**Working idea:** a public artificial-life simulation in which a population of small, visibly embodied agents begins with only three possible vocal units - `a`, `ni`, and `so` - and must survive, coordinate, learn, reproduce, and transmit conventions. Visitors watch whether the population develops stable call meanings, sequences, local dialects, or something that deserves to be called compositional communication.
 
 **Short verdict:** this is a strong simulation concept. It connects animal communication, signaling games, iterated learning, cultural evolution, and artificial life in a way that can be both scientifically interesting and immediately legible to the public. The important qualification is that it would not simulate *how human language actually evolved*. It would test narrower questions about the conditions under which a small signal repertoire can acquire shared, productive structure.
 
@@ -35,7 +35,7 @@ That question can be separated into observable milestones:
 6. **Transmission:** new agents learn the system, and it survives population turnover.
 7. **Open-ended change:** conventions split, merge, drift, simplify, or form dialects as ecology and social structure change.
 
-The simulation should not assume that the last steps will occur. A run in which three calls stabilize but never combine is a valid—and theoretically interesting—result.
+The simulation should not assume that the last steps will occur. A run in which three calls stabilize but never combine is a valid - and theoretically interesting - result.
 
 ## 2. Why vervets are a useful inspiration, with a caveat
 
@@ -47,7 +47,7 @@ So the scientifically honest framing is:
 
 - vervets motivate a small, behaviorally important call repertoire;
 - the model is an invented evolutionary sandbox, not a digital vervet colony;
-- the interesting bridge is from signals and context to learned conventions—not a claim that vervet calls are already words.
+- the interesting bridge is from signals and context to learned conventions - not a claim that vervet calls are already words.
 
 This caveat actually improves the project. Context, caller identity, trust, urgency, and ambiguity can be part of the world rather than treated as noise around fixed dictionary meanings.
 
@@ -171,7 +171,7 @@ Begin with aligned payoffs, where caller and listener both benefit from an accur
 
 ### E. Novelty and productivity
 
-Hold out some combinations during learning—for example, agents encounter “near aerial threat” and “far terrestrial threat,” but not “far aerial threat.” Then introduce the missing combination. Success shows generalization; analysis of the message parts asks whether that success was compositional. These must be measured separately: high task generalization does not by itself prove a compositional code ([Chaabouni et al., 2020](https://aclanthology.org/2020.acl-main.407/)).
+Hold out some combinations during learning - for example, agents encounter “near aerial threat” and “far terrestrial threat,” but not “far aerial threat.” Then introduce the missing combination. Success shows generalization; analysis of the message parts asks whether that success was compositional. These must be measured separately: high task generalization does not by itself prove a compositional code ([Chaabouni et al., 2020](https://aclanthology.org/2020.acl-main.407/)).
 
 ### F. Selection versus drift
 
@@ -190,7 +190,7 @@ No single score should decide this. The dashboard should combine behavioral, inf
 | Population agreement | Different agents use and interpret forms similarly |
 | Cross-partner success | Conventions work beyond familiar pairs |
 | Held-out combination success | The system supports novel cases |
-| Form–meaning similarity | Similar meanings tend to have systematically similar messages |
+| Form-meaning similarity | Similar meanings tend to have systematically similar messages |
 | Unit contribution analysis | A token has a stable effect across different messages |
 | Learnability by newborns | The system survives transmission |
 | Ablation of calls or order | Identifies whether tokens and sequence order actually matter |
@@ -241,7 +241,7 @@ Build the smallest experiment that can falsify the exciting story.
 
 ### Fixed setup
 
-- 30–60 agents;
+- 30-60 agents;
 - three broad threat/action classes;
 - additional variation in distance and direction;
 - local, noisy perception;
@@ -304,7 +304,7 @@ Better language is: “In this model, under these assumptions, this population d
 
 ## 12. Recommended direction
 
-Start `aniso` as a **transparent cultural-evolution observatory**, not as a general AI society. The hook is charming little agents calling `a`, `ni`, and `so`; the substance is the ability to watch conventions form, drift, combine, and pass between generations—and to test whether an apparent language-like pattern survives intervention and replication.
+Start `aniso` as a **transparent cultural-evolution observatory**, not as a general AI society. The hook is charming little agents calling `a`, `ni`, and `so`; the substance is the ability to watch conventions form, drift, combine, and pass between generations - and to test whether an apparent language-like pattern survives intervention and replication.
 
 The most compelling initial research question is:
 

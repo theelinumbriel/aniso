@@ -123,7 +123,7 @@
     const y = parent ? clamp(parent.y + (rng() - 0.5) * 70, 26, WORLD.height - 26) : 35 + rng() * (WORLD.height - 70);
 
     return {
-      id: `A–${pad(index, 3)}`,
+      id: `A-${pad(index, 3)}`,
       x,
       y,
       previousX: x,
@@ -291,7 +291,7 @@
         call,
         threatType: threat.type,
         successful: false,
-        otherId: "—",
+        otherId: "-",
         response: "UNHEARD",
       });
     } else if (witnessSuccesses === 0) {
@@ -544,7 +544,7 @@
       THREATS.forEach((__, threatIndex) => {
         const percentage = rowTotal ? Math.round((world.association[callIndex][threatIndex] / rowTotal) * 100) : 0;
         const cell = cells[cellIndex];
-        cell.textContent = rowTotal ? `${percentage}%` : "–";
+        cell.textContent = rowTotal ? `${percentage}%` : "-";
         cell.style.setProperty("--heat", String(Math.min(82, percentage * 1.25)));
         cellIndex += 1;
       });

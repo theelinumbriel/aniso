@@ -14,6 +14,6 @@ Then open `http://localhost:4173`.
 
 ## Model status
 
-This is an interface and model prototype, not a claim about the historical evolution of human language. The three threat labels describe visual geometry, while call–threat associations emerge from agent reinforcement and begin without a built-in dictionary.
+This is an interface and model prototype, not a claim about the historical evolution of human language. The three threat labels describe visual geometry, while call-threat associations emerge from agent reinforcement and begin without a built-in dictionary.
 
 See [BRIEFING.md](./BRIEFING.md) for the research framing and future experiment plan.
